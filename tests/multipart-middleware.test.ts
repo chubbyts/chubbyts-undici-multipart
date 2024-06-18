@@ -3,12 +3,12 @@ import { PassThrough } from 'stream';
 import { createReadStream, readFileSync, promises as fs } from 'fs';
 import { tmpdir } from 'os';
 import { createHash } from 'crypto';
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import * as FormData from 'form-data';
 import { parse } from 'qs';
+import FormData from 'form-data';
 import { createMultipartMiddleware } from '../src/multipart-middleware';
 
 const redImagePath = process.cwd() + '/tests/resources/red.png';

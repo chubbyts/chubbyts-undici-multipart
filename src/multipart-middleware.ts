@@ -3,7 +3,7 @@ import { createWriteStream, mkdirSync } from 'fs';
 import type { IncomingHttpHeaders } from 'http';
 import { tmpdir } from 'os';
 import { PassThrough } from 'stream';
-import * as busboy from 'busboy';
+import busboy from 'busboy';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
