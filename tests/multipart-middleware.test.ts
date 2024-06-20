@@ -3,7 +3,7 @@ import { PassThrough } from 'stream';
 import { createReadStream, readFileSync, promises as fs } from 'fs';
 import { tmpdir } from 'os';
 import { createHash } from 'crypto';
-import { describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
@@ -48,7 +48,7 @@ const getStream = async (stream: Stream): Promise<string> => {
 
     stream.on('data', (chunk) => (data += chunk));
     stream.on('end', () => resolve(data));
-    stream.on('error', (error) => reject(error));
+    stream.on('error', reject);
   });
 };
 
