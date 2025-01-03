@@ -23,8 +23,8 @@ Chubbyts Http multipart request handling.
 
 ## Requirements
 
- * node: 16
- * [@chubbyts/chubbyts-http-types][2]: ^1.2.3
+ * node: 18
+ * [@chubbyts/chubbyts-http-types][2]: ^1.3.0
  * [busboy][3]: ^1.6.0
 
 ## Installation
@@ -32,7 +32,7 @@ Chubbyts Http multipart request handling.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-http-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-http-multipart@^1.1.0
+npm i @chubbyts/chubbyts-http-multipart@^1.2.0
 ```
 
 ## Usage
@@ -108,7 +108,7 @@ blue=/tmp/multipart/.../blue.png; filename=blue.png; mimeType=image/png&
 
 ## Copyright
 
-2024 Dominik Zogg
+2025 Dominik Zogg
 
 [1]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
 [2]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
