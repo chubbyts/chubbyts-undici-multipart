@@ -24,7 +24,7 @@ Chubbyts Http multipart request handling.
 ## Requirements
 
  * node: 18
- * [@chubbyts/chubbyts-http-types][2]: ^1.3.1 || ^2.0.0
+ * [@chubbyts/chubbyts-http-types][2]: ^3.0.0
  * [busboy][3]: ^1.6.0
 
 ## Installation
@@ -32,7 +32,7 @@ Chubbyts Http multipart request handling.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-http-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-http-multipart@^1.3.0
+npm i @chubbyts/chubbyts-http-multipart@^2.0.0
 ```
 
 ## Usage
