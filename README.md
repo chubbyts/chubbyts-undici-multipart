@@ -32,7 +32,7 @@ Chubbyts Http multipart request handling.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-http-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-http-multipart@^2.0.0
+npm i @chubbyts/chubbyts-http-multipart@^2.0.1
 ```
 
 ## Usage
