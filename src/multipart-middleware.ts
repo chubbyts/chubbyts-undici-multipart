@@ -1,59 +1,73 @@
 import { randomBytes } from 'crypto';
 import { createWriteStream, mkdirSync } from 'fs';
-import type { IncomingHttpHeaders } from 'http';
 import { tmpdir } from 'os';
-import { PassThrough } from 'stream';
+import { PassThrough, Readable } from 'stream';
+import { finished } from 'stream/promises';
 import busboy from 'busboy';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Handler, Middleware, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 
 export const createMultipartMiddleware = (limits: busboy.Limits | undefined = undefined): Middleware => {
-  return async (request: ServerRequest, handler: Handler): Promise<Response> => {
-    const headers: IncomingHttpHeaders = Object.fromEntries(
-      Object.entries(request.headers).map(([name, value]) => [name, value.join()]),
-    );
+  return async (serverRequest: ServerRequest, handler: Handler): Promise<Response> => {
+    const { body } = serverRequest;
 
-    if (!headers['content-type']?.match(/multipart\/form-data/)) {
-      return handler(request);
+    if (!body) {
+      return handler(serverRequest);
     }
 
-    const body = await new Promise<PassThrough>((resolve) => {
-      const temporaryPath = `${tmpdir()}/multipart/${randomBytes(64).toString('hex')}`;
+    const headers = Object.fromEntries([...serverRequest.headers.entries()]);
 
-      mkdirSync(temporaryPath, { recursive: true });
+    const contentType = headers['content-type'];
+    if (!contentType || !/multipart\/form-data/i.test(contentType) || !/boundary=/i.test(contentType)) {
+      return handler(serverRequest);
+    }
 
-      const newBody = new PassThrough();
+    const temporaryPath = `${tmpdir()}/multipart/${randomBytes(64).toString('hex')}`;
+    mkdirSync(temporaryPath, { recursive: true });
 
-      const multipartStream = busboy({ headers, limits });
+    const fileFinishedPromises: Promise<void>[] = [];
 
-      multipartStream.on('file', (name, file, info) => {
-        const { filename, mimeType } = info;
-        const filePath = `${temporaryPath}/${filename}`;
+    const newBody = new PassThrough();
 
-        file.pipe(createWriteStream(filePath));
+    const multipartStream = busboy({ headers, limits });
 
-        const value = `${filePath}; filename=${filename}; mimeType=${mimeType}`;
+    multipartStream.on('file', (name, readableFile, info) => {
+      const { filename, mimeType } = info;
 
-        newBody.write(`${name}=${encodeURIComponent(value)}&`);
-      });
+      const temporaryFilePath = `${temporaryPath}/${randomBytes(64).toString('hex')}`;
 
-      multipartStream.on('field', (name, value) => {
-        newBody.write(`${name}=${encodeURIComponent(value)}&`);
-      });
+      const temporaryFileStream = createWriteStream(temporaryFilePath);
+      readableFile.pipe(temporaryFileStream);
 
-      multipartStream.on('close', () => {
-        newBody.end();
-        resolve(newBody);
-      });
+      // eslint-disable-next-line functional/immutable-data
+      fileFinishedPromises.push(finished(temporaryFileStream));
 
-      request.body.pipe(multipartStream);
+      const value = `${temporaryFilePath}; filename=${filename}; mimeType=${mimeType}`;
+      newBody.write(`${encodeURIComponent(name)}=${encodeURIComponent(value)}&`);
     });
 
-    return handler({
-      ...request,
-      headers: { ...request.headers, 'content-type': ['application/x-www-form-urlencoded'] },
-      body,
+    multipartStream.on('field', (name, value) => {
+      newBody.write(`${encodeURIComponent(name)}=${encodeURIComponent(value)}&`);
     });
+
+    multipartStream.on('finish', async () => {
+      if (fileFinishedPromises.length > 0) {
+        await Promise.all(fileFinishedPromises);
+      }
+      newBody.end();
+    });
+
+    Readable.fromWeb(body).pipe(multipartStream);
+
+    return handler(
+      new ServerRequest(serverRequest, {
+        headers: {
+          ...headers,
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+        body: Readable.toWeb(newBody),
+        duplex: 'half',
+      }),
+    );
   };
 };

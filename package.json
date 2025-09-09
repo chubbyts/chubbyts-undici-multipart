@@ -1,8 +1,8 @@
 {
-  "name": "@chubbyts/chubbyts-http-multipart",
+  "name": "@chubbyts/chubbyts-undici-multipart",
   "type": "module",
-  "version": "2.0.1",
-  "description": "Chubbyts Http multipart request handling",
+  "version": "1.0.0",
+  "description": "A minimal multipart middleware for chubbyts-undici-server.",
   "keywords": [
     "chubbyts",
     "http",
@@ -11,7 +11,7 @@
   ],
   "author": "Dominik Zogg",
   "license": "MIT",
-  "repository": "chubbyts/chubbyts-http-multipart",
+  "repository": "chubbyts/chubbyts-undici-multipart",
   "scripts": {
     "build": "tsc",
     "cs-fix": "prettier --write src tests",
@@ -39,26 +39,25 @@
     }
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
-    "@chubbyts/chubbyts-http-types": "^3.0.0",
+    "@chubbyts/chubbyts-undici-server": "^1.0.0",
     "busboy": "^1.6.0"
   },
   "devDependencies": {
-    "@chubbyts/chubbyts-eslint": "^4.0.2",
-    "@chubbyts/chubbyts-function-mock": "^2.0.1",
-    "@stryker-mutator/core": "^9.0.1",
-    "@stryker-mutator/vitest-runner": "^9.0.1",
+    "@chubbyts/chubbyts-eslint": "^4.0.7",
+    "@chubbyts/chubbyts-function-mock": "^2.0.2",
+    "@stryker-mutator/core": "^9.1.1",
+    "@stryker-mutator/vitest-runner": "^9.1.1",
     "@types/busboy": "^1.5.4",
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.3.1",
     "@types/qs": "^6.14.0",
-    "@vitest/coverage-v8": "^3.2.3",
-    "form-data": "^4.0.3",
-    "prettier": "^3.5.3",
+    "@vitest/coverage-v8": "^3.2.4",
+    "prettier": "^3.6.2",
     "qs": "^6.14.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.3"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "publishConfig": {
     "access": "public"
