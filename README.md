@@ -106,7 +106,7 @@ blue=/tmp/multipart/.../...; filename=blue.png; mimeType=image/png&
 
 ## Copyright
 
-2025 Dominik Zogg
+2026 Dominik Zogg
 
 [1]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-multipart
 [2]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server
