@@ -60,6 +60,28 @@ describe('createMultipartMiddleware', () => {
     expect(handlerMocks.length).toBe(0);
   });
 
+  test('without body and multipart/form-data content-type', async () => {
+    const serverRequest = new ServerRequest('https://example.com', {
+      method: 'post',
+      headers: { 'content-type': 'multipart/form-data; boundary=----test-boundary' },
+      body: null,
+    });
+    const response = new Response();
+
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
+      {
+        parameters: [serverRequest],
+        return: Promise.resolve(response),
+      },
+    ]);
+
+    const multipartMiddleware = createMultipartMiddleware();
+
+    expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
+
+    expect(handlerMocks.length).toBe(0);
+  });
+
   test('without content-type', async () => {
     const serverRequest = new ServerRequest('https://example.com', { method: 'post', body: 'somebody' });
     const response = new Response();
@@ -82,6 +104,28 @@ describe('createMultipartMiddleware', () => {
     const serverRequest = new ServerRequest('https://example.com', {
       method: 'post',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'somebody',
+    });
+    const response = new Response();
+
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
+      {
+        parameters: [serverRequest],
+        return: Promise.resolve(response),
+      },
+    ]);
+
+    const multipartMiddleware = createMultipartMiddleware();
+
+    expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
+
+    expect(handlerMocks.length).toBe(0);
+  });
+
+  test('without multipart/form-data but with boundary', async () => {
+    const serverRequest = new ServerRequest('https://example.com', {
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded; boundary=----test-boundary' },
       body: 'somebody',
     });
     const response = new Response();

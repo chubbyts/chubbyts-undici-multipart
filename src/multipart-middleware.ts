@@ -25,7 +25,7 @@ export const createMultipartMiddleware = (limits: busboy.Limits | undefined = un
     const temporaryPath = `${tmpdir()}/multipart/${randomBytes(64).toString('hex')}`;
     mkdirSync(temporaryPath, { recursive: true });
 
-    const fileFinishedPromises: Promise<void>[] = [];
+    const fileFinishedPromises = new Set<Promise<void>>();
 
     const newBody = new PassThrough();
 
@@ -40,7 +40,7 @@ export const createMultipartMiddleware = (limits: busboy.Limits | undefined = un
       readableFile.pipe(temporaryFileStream);
 
       // eslint-disable-next-line functional/immutable-data
-      fileFinishedPromises.push(finished(temporaryFileStream));
+      fileFinishedPromises.add(finished(temporaryFileStream));
 
       const value = `${temporaryFilePath}; filename=${filename}; mimeType=${mimeType}`;
       newBody.write(`${encodeURIComponent(name)}=${encodeURIComponent(value)}&`);
@@ -51,9 +51,7 @@ export const createMultipartMiddleware = (limits: busboy.Limits | undefined = un
     });
 
     multipartStream.on('finish', async () => {
-      if (fileFinishedPromises.length > 0) {
-        await Promise.all(fileFinishedPromises);
-      }
+      await Promise.all(fileFinishedPromises);
       newBody.end();
     });
 
