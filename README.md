@@ -24,7 +24,7 @@ A minimal multipart middleware for chubbyts-undici-server.
 ## Requirements
 
  * node: 22
- * [@chubbyts/chubbyts-undici-server][2]: ^1.1.1
+ * [@chubbyts/chubbyts-undici-server][2]: ^1.1.2
  * [busboy][3]: ^1.6.0
 
 ## Installation
@@ -32,7 +32,7 @@ A minimal multipart middleware for chubbyts-undici-server.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-undici-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-undici-multipart@^1.1.1
+npm i @chubbyts/chubbyts-undici-multipart@^1.1.2
 ```
 
 ## Usage
