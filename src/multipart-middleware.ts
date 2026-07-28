@@ -15,7 +15,7 @@ export const createMultipartMiddleware = (limits: busboy.Limits | undefined = un
       return handler(serverRequest);
     }
 
-    const headers = Object.fromEntries([...serverRequest.headers.entries()]);
+    const headers = Object.fromEntries(serverRequest.headers.entries());
 
     const contentType = headers['content-type'];
     if (!contentType || !/multipart\/form-data/i.test(contentType) || !/boundary=/i.test(contentType)) {
@@ -39,7 +39,7 @@ export const createMultipartMiddleware = (limits: busboy.Limits | undefined = un
       const temporaryFileStream = createWriteStream(temporaryFilePath);
       readableFile.pipe(temporaryFileStream);
 
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       fileFinishedPromises.add(finished(temporaryFileStream));
 
       const value = `${temporaryFilePath}; filename=${filename}; mimeType=${mimeType}`;

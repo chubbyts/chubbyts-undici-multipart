@@ -158,7 +158,7 @@ describe('createMultipartMiddleware', () => {
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         {
           callback: async (givenRequest: ServerRequest) => {
-            expect(Object.fromEntries([...givenRequest.headers.entries()])).toMatchInlineSnapshot(`
+            expect(Object.fromEntries(givenRequest.headers.entries())).toMatchInlineSnapshot(`
               {
                 "content-type": "application/x-www-form-urlencoded",
               }
@@ -227,7 +227,7 @@ describe('createMultipartMiddleware', () => {
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         {
           callback: async (givenRequest: ServerRequest) => {
-            expect(Object.fromEntries([...givenRequest.headers.entries()])).toMatchInlineSnapshot(`
+            expect(Object.fromEntries(givenRequest.headers.entries())).toMatchInlineSnapshot(`
               {
                 "content-type": "application/x-www-form-urlencoded",
               }
