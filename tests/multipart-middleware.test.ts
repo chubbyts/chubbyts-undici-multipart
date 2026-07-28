@@ -1,7 +1,7 @@
-import { readFileSync, promises as fs } from 'fs';
-import { tmpdir } from 'os';
-import { createHash } from 'crypto';
-import { basename } from 'path';
+import { readFileSync, promises as fs } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { createHash } from 'node:crypto';
+import { basename } from 'node:path';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import { parse } from 'qs';
@@ -57,7 +57,7 @@ describe('createMultipartMiddleware', () => {
 
     expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
   });
 
   test('without body and multipart/form-data content-type', async () => {
@@ -79,7 +79,7 @@ describe('createMultipartMiddleware', () => {
 
     expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
   });
 
   test('without content-type', async () => {
@@ -97,7 +97,7 @@ describe('createMultipartMiddleware', () => {
 
     expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
   });
 
   test('without multipart/form-data', async () => {
@@ -119,7 +119,7 @@ describe('createMultipartMiddleware', () => {
 
     expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
   });
 
   test('without multipart/form-data but with boundary', async () => {
@@ -141,7 +141,7 @@ describe('createMultipartMiddleware', () => {
 
     expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
   });
 
   describe('with multipart/form-data', () => {
@@ -211,7 +211,7 @@ describe('createMultipartMiddleware', () => {
 
       expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-      expect(handlerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
     });
 
     test('allow only 1 file', async () => {
@@ -264,7 +264,7 @@ describe('createMultipartMiddleware', () => {
 
       expect(await multipartMiddleware(serverRequest, handler)).toBe(response);
 
-      expect(handlerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
     });
   });
 });
