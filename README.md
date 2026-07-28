@@ -32,7 +32,7 @@ A minimal multipart middleware for chubbyts-undici-server.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-undici-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-undici-multipart@^1.1.3
+npm i @chubbyts/chubbyts-undici-multipart@^1.2.0
 ```
 
 ## Usage
