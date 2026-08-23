@@ -24,6 +24,8 @@ A minimal multipart middleware for chubbyts-undici-server.
 ## Requirements
 
  * node: 22
+ * [@chubbyts/chubbyts-dic-config-factory][6]: ^1.0.0
+ * [@chubbyts/chubbyts-dic-types][4]: ^2.3.0
  * [@chubbyts/chubbyts-undici-server][2]: ^1.2.0
  * [busboy][3]: ^1.6.0
 
@@ -32,7 +34,7 @@ A minimal multipart middleware for chubbyts-undici-server.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-undici-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-undici-multipart@^1.2.0
+npm i @chubbyts/chubbyts-undici-multipart@^1.3.0
 ```
 
 ## Usage
@@ -103,6 +105,55 @@ green=/tmp/multipart/.../...; filename=green.png; mimeType=image/png&
 blue=/tmp/multipart/.../...; filename=blue.png; mimeType=image/png&
 ```
 
+### Service factory (chubbyts-dic-config)
+
+The package ships a service factory (an abstract factory built on [chubbyts-dic-config-factory][6]) for a [chubbyts-dic-config][5] (or any [chubbyts-dic-types][4] compatible) container within `@chubbyts/chubbyts-undici-multipart/dist/service-factory`, configured through `config.chubbyts.multipart` (optional, see the `limits` of [busboy][3]):
+
+```ts
+import type { ConfigFactory } from '@chubbyts/chubbyts-dic-config/dist/dic-config';
+import { createContainerByConfigFactory } from '@chubbyts/chubbyts-dic-config/dist/dic-config';
+import type { MultipartConfig } from '@chubbyts/chubbyts-undici-multipart/dist/service-factory';
+import { multipartMiddlewareServiceFactory } from '@chubbyts/chubbyts-undici-multipart/dist/service-factory';
+import type { Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
+
+const container = createContainerByConfigFactory({
+  chubbyts: {
+    multipart: {
+      // limits: { fileSize: 10 * 1024 * 1024, files: 5 },
+    } satisfies MultipartConfig,
+  },
+  dependencies: {
+    factories: new Map<string, ConfigFactory>([['multipartMiddleware', multipartMiddlewareServiceFactory()]]),
+  },
+})();
+
+const multipartMiddleware = container.get<Middleware>('multipartMiddleware');
+```
+
+#### With names
+
+To use different limits for different parts of an api, the factory can be registered multiple times with a name: the config is then read from `config.chubbyts.multipart.<name>`.
+
+```ts
+const container = createContainerByConfigFactory({
+  chubbyts: {
+    multipart: {
+      api: { limits: { fileSize: 1024 * 1024 } },
+      admin: { limits: { fileSize: 100 * 1024 * 1024 } },
+    } satisfies Record<string, MultipartConfig>,
+  },
+  dependencies: {
+    factories: new Map<string, ConfigFactory>([
+      ['multipartMiddlewareapi', multipartMiddlewareServiceFactory('api')],
+      ['multipartMiddlewareadmin', multipartMiddlewareServiceFactory('admin')],
+    ]),
+  },
+})();
+
+const apiMultipartMiddleware = container.get<Middleware>('multipartMiddlewareapi');
+const adminMultipartMiddleware = container.get<Middleware>('multipartMiddlewareadmin');
+```
+
 
 ## Copyright
 
@@ -111,3 +162,6 @@ blue=/tmp/multipart/.../...; filename=blue.png; mimeType=image/png&
 [1]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-multipart
 [2]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server
 [3]: https://www.npmjs.com/package/busboy
+[4]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-types
+[5]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-config
+[6]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-config-factory
