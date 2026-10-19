@@ -24,9 +24,9 @@ A minimal multipart middleware for chubbyts-undici-server.
 ## Requirements
 
  * node: 22
- * [@chubbyts/chubbyts-dic-config-factory][6]: ^1.0.0
- * [@chubbyts/chubbyts-dic-types][4]: ^2.3.0
- * [@chubbyts/chubbyts-undici-server][2]: ^1.2.0
+ * [@chubbyts/chubbyts-dic-config-factory][6]: ^1.0.1
+ * [@chubbyts/chubbyts-dic-types][4]: ^2.3.1
+ * [@chubbyts/chubbyts-undici-server][2]: ^1.3.1
  * [busboy][3]: ^1.6.0
 
 ## Installation
@@ -34,7 +34,7 @@ A minimal multipart middleware for chubbyts-undici-server.
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-undici-multipart][1].
 
 ```sh
-npm i @chubbyts/chubbyts-undici-multipart@^1.3.0
+npm i @chubbyts/chubbyts-undici-multipart@^1.3.1
 ```
 
 ## Usage
